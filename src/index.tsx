@@ -1,25 +1,27 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { ThemeProvider, theme } from "@activityeducation/component-library"; // Adjust package name if different
-// import reportWebVitals from './reportWebVitals';
+// src/index.tsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter as Router } from 'react-router';
+import { Provider } from 'react-redux';
 
-import App from "./App";
+import './index.css'; // Keep existing global styles
 
-import './variables.css';
-import "./index.css";
+import App from './App'; // The main App component
+import reportWebVitals from './reportWebVitals';
+import store from './redux/store'; // Import the Redux store
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
-root.render(
-  <ThemeProvider theme={theme}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </ThemeProvider>
+  document.getElementById('root') as HTMLElement
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-// reportWebVitals();
+root.render(
+  <React.StrictMode>
+    <Provider store={store}> {/* Wrap App with Redux Provider */}
+      <Router basename='/app'> {/* Wrap with BrowserRouter for routing */}
+        <App />
+      </Router>
+    </Provider>
+  </React.StrictMode>
+);
+
+reportWebVitals();

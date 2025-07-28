@@ -10,7 +10,7 @@ const HomePageContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 64px); /* Adjust based on toolbar height */
+  max-height: calc(100vh - 64px); /* Adjust based on toolbar height */
   background-color: ${theme.colors.background.default};
   color: ${theme.colors.text.default};
   padding: ${theme.spacing.lg};

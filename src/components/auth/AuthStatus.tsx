@@ -11,19 +11,10 @@ import { theme } from '@activityeducation/component-library';
 
 const AuthStatusContainer = styled.div`
   display: flex;
+  justify-content: space-between;
+  maring-left: auto;
   align-items: center;
   gap: ${theme.spacing.sm};
-`;
-
-const EduPubTextLink = styled(Link)`
-  text-decoration: none;
-`;
-
-const EduPubText = styled.span`
-  font-weight: bold;
-  color: ${theme.colors.text.default};
-  font-size: ${theme.typography.body.fontSize};
-  margin-right: ${theme.spacing.md};
 `;
 
 const StyledWelcomeText = styled.span`
@@ -44,9 +35,6 @@ const AuthStatus = () => {
 
   return (
     <AuthStatusContainer>
-      <EduPubTextLink to="/home">
-        <EduPubText>EduPub</EduPubText>
-      </EduPubTextLink>
       {isAuthenticated ? (
         <>
           <StyledWelcomeText>
@@ -58,10 +46,10 @@ const AuthStatus = () => {
         </>
       ) : (
         <>
-          <Button variant='ghost' onClick={() => navigate('/register')}>
+          <Button variant='ghost' size='sm' onClick={() => navigate('/register')}>
             Register
           </Button>
-          <Button onClick={() => navigate('/login')}>
+          <Button size='sm' onClick={() => navigate('/login')}>
             Login
           </Button>
         </>

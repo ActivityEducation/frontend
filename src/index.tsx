@@ -16,8 +16,8 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}> {/* Wrap App with Redux Provider */}
-      <Router basename='/app'> {/* Wrap with BrowserRouter for routing */}
+    <Provider store={store}>
+      <Router basename='/app'>
         <App />
       </Router>
     </Provider>

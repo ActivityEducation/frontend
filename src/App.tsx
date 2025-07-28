@@ -1,6 +1,6 @@
 // src/App.tsx
 import React, { useEffect } from 'react';
-import { Routes, Route, Navigate } from 'react-router'; // Changed from 'react-router-dom'
+import { Routes, Route, Navigate, Link } from 'react-router'; // Changed from 'react-router-dom'
 import { useDispatch } from 'react-redux';
 import { ThemeProvider, theme, Toolbar } from '@activityeducation/component-library';
 import { css } from '@emotion/react';
@@ -22,8 +22,14 @@ import './App.css';
 // Styled component for the EduPub text in the toolbar
 const EduPubText = styled.span`
   font-weight: bold;
-  color: ${theme.colors.text.onPrimary};
-  font-size: ${theme.typography.h4.fontSize}; /* Using h4 fontSize for a bolder look */
+  color: black;
+  display: flex;
+  font-size: ${theme.typography.bodyLarge.fontSize}; /* Using h4 fontSize for a bolder look */
+`;
+
+const EduPubTextLink = styled(Link)`
+  text-decoration: none;
+  align-content: center;
 `;
 
 const toolbarBackend = css`
@@ -44,16 +50,13 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <Toolbar style={{
-            backgroundColor: "rgb(243, 239, 233)",
-            height: "32px",
-            padding: "6px 16px",
-            display: "flex",
-            alignItems: "center",
-            borderRadius: '0px',
-            color: 'black',
-          }}>
-          <img style={{ maxHeight: '32px', maxWidth: '32px' }} src={logo} alt="EduPub Logo" />
+        <Toolbar justifyContent="space-between">
+          <div style={{ display: 'flex', alignContent: 'center', color: 'black', gap: '10px' }}>
+            <img style={{ maxHeight: '32px', maxWidth: '32px' }} src={logo} alt="EduPub Logo" />
+            <EduPubTextLink to="/home">
+              <EduPubText>EduPub</EduPubText>
+            </EduPubTextLink>
+          </div>
           <AuthStatus /> {/* Auth status component for login/register/logout buttons */}
         </Toolbar>
 

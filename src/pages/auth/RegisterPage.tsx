@@ -80,7 +80,7 @@ const RegisterPage = () => {
             type="text"
             placeholder="Username"
             label="Username"
-            leading={<Icon name="fa-regular fa-user" />}
+            leading={<Icon name="fa-solid fa-user" />}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
@@ -122,7 +122,7 @@ const RegisterPage = () => {
             type="password"
             placeholder="Password"
             label="Password"
-            leading={<Icon name="fa-regular fa-lock" />}
+            leading={<Icon name="fa-solid fa-lock" />}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required

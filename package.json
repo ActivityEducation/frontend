@@ -4,7 +4,7 @@
   "homepage": "/app",
   "private": true,
   "dependencies": {
-    "@activityeducation/component-library": "^1.0.9",
+    "@activityeducation/component-library": "^1.0.11",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",

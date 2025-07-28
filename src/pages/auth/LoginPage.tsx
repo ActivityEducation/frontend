@@ -80,7 +80,7 @@ const LoginPage = () => {
             type="text"
             placeholder="Username"
             label="Username"
-            leading={<Icon name="fa-regular fa-user" />}
+            leading={<Icon name="fa-solid fa-user" />}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
@@ -101,7 +101,7 @@ const LoginPage = () => {
             placeholder="Password"
             label="Password"
             value={password}
-            leading={<Icon name="fa-regular fa-lock" />}
+            leading={<Icon name="fa-solid fa-lock" />}
             onChange={(e) => setPassword(e.target.value)}
             required
             css={css`

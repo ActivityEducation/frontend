@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.flashcard-wrapper {
+  width: 100%;
+}
+
+.card-container {
+  width: 100%;
+  aspect-ratio: 633 / 400; // DESIGN_WIDTH / DESIGN_HEIGHT
+  position: relative;
+  overflow: hidden;
+  background-color: #ffffff; // Corresponds to theme.colors.background.default
+}
+
+.field-wrapper {
+  position: absolute;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  overflow: hidden;
+}
+
+.image-field {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

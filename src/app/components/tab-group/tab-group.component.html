@@ -1,0 +1,11 @@
+<div class="tab-group-container" [ngClass]="'variant-' + variant">
+  <button 
+    *ngFor="let tab of tabs"
+    class="tab-button"
+    [class.active]="tab.id === activeTabId"
+    [disabled]="tab.disabled"
+    (click)="selectTab(tab)"
+    type="button">
+    {{ tab.label }}
+  </button>
+</div>

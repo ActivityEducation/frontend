@@ -1,0 +1,11 @@
+<mat-toolbar class="top-toolbar">
+    <img src="/logo.png" alt="EducationPub Logo">
+    <span class="title" mat-button [routerLink]="['/']">EduPub</span>
+    <button *ngIf="(username$ | async)" mat-button [routerLink]="['/', 'dashboard']">Dashboard</button>
+    <button *ngIf="(username$ | async)" mat-button [routerLink]="['/', 'flashcard']">Flashcards</button>
+    <button mat-button [routerLink]="['/', 'graph']">Graph</button>
+    <span class="spacer"></span>
+    <span>{{ username$ | async }}</span>
+    <button *ngIf="!(username$ | async)" mat-button [routerLink]="['/', 'auth']">Login</button>
+</mat-toolbar>
+<router-outlet></router-outlet>

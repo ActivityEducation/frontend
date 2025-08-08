@@ -1,0 +1,17 @@
+<div class="card-container">
+  <!-- Render header only if title or a custom header template is provided -->
+  <div *ngIf="title || header" class="card-header">
+    <!-- If a custom header template is given, use it -->
+    <ng-container *ngIf="header; else defaultHeader" [ngTemplateOutlet]="header"></ng-container>
+    
+    <!-- Otherwise, use the default title display -->
+    <ng-template #defaultHeader>
+      <h3 class="card-title">{{ title }}</h3>
+    </ng-template>
+  </div>
+
+  <!-- Main content area -->
+  <div class="card-content">
+    <ng-content></ng-content>
+  </div>
+</div>

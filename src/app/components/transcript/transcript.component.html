@@ -1,0 +1,25 @@
+<div class="transcript-container">
+  <div class="transcript-header">
+    <i class="material-icons">closed_caption</i>
+    <h3>Transcript</h3>
+  </div>
+  
+  <div *ngIf="transcript.length > 0; else emptyState" class="transcript-list-wrapper">
+    <ul class="transcript-list">
+      <li 
+        #segmentItem
+        *ngFor="let segment of transcript"
+        [attr.data-segment-id]="segment.id"
+        [class.active]="activeSegment?.id === segment.id">
+        {{ segment.text }}
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="empty-state-container">
+      <i class="material-icons empty-icon">description</i>
+      <p>No transcript available.</p>
+    </div>
+  </ng-template>
+</div>

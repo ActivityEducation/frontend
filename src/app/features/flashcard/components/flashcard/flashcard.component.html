@@ -1,0 +1,72 @@
+<div #cardContainer class="flashcard-wrapper">
+  <app-flipper
+    *ngIf="frontTemplate && backTemplate"
+    [isFlipped]="isFlipped"
+    (flipChange)="flipChange.emit($event)"
+  >
+    <!-- Front Side Template -->
+    <ng-template #front>
+      <div class="card-container">
+        <ng-container *ngFor="let layout of frontTemplate.layout">
+          <div
+            class="field-wrapper"
+            [style.left.px]="layout.x * scale"
+            [style.top.px]="layout.y * scale"
+            [style.width.px]="layout.width * scale"
+            [style.height.px]="layout.height * scale"
+          >
+            <ng-container [ngSwitch]="getFieldDefinition(layout.fieldId)?.type">
+              <app-dynamic-text-field
+                *ngSwitchCase="'text'"
+                [text]="getFieldContent(getFieldDefinition(layout.fieldId))"
+                [scale]="scale"
+              ></app-dynamic-text-field>
+              <img
+                *ngSwitchCase="'image'"
+                class="image-field"
+                [src]="getFieldContent(getFieldDefinition(layout.fieldId))"
+                [alt]="getFieldDefinition(layout.fieldId)?.name"
+              />
+              <!-- Placeholder for icon, requires a dedicated icon component -->
+              <div *ngSwitchCase="'icon'">
+                Icon: {{ getFieldContent(getFieldDefinition(layout.fieldId)) }}
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+    </ng-template>
+
+    <!-- Back Side Template -->
+    <ng-template #back>
+      <div class="card-container">
+        <ng-container *ngFor="let layout of backTemplate.layout">
+          <div
+            class="field-wrapper"
+            [style.left.px]="layout.x * scale"
+            [style.top.px]="layout.y * scale"
+            [style.width.px]="layout.width * scale"
+            [style.height.px]="layout.height * scale"
+          >
+            <ng-container [ngSwitch]="getFieldDefinition(layout.fieldId)?.type">
+              <app-dynamic-text-field
+                *ngSwitchCase="'text'"
+                [text]="getFieldContent(getFieldDefinition(layout.fieldId))"
+                [scale]="scale"
+              ></app-dynamic-text-field>
+              <img
+                *ngSwitchCase="'image'"
+                class="image-field"
+                [src]="getFieldContent(getFieldDefinition(layout.fieldId))"
+                [alt]="getFieldDefinition(layout.fieldId)?.name"
+              />
+              <div *ngSwitchCase="'icon'">
+                Icon: {{ getFieldContent(getFieldDefinition(layout.fieldId)) }}
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+    </ng-template>
+  </app-flipper>
+</div>

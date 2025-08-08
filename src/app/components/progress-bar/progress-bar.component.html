@@ -1,0 +1,20 @@
+<div class="progress-container">
+  <!-- Header with Title and Value Display -->
+  <div *ngIf="title" class="progress-header">
+    <span class="progress-title">{{ title }}</span>
+    <span class="progress-value">{{ value }} / {{ total }}</span>
+  </div>
+
+  <!-- Visual Progress Bar -->
+  <div class="progress-track">
+    <div 
+      class="progress-bar" 
+      [ngClass]="'progress-bar-' + variant"
+      [style.width.%]="percentage"
+      role="progressbar"
+      [attr.aria-valuenow]="value"
+      [attr.aria-valuemin]="0"
+      [attr.aria-valuemax]="total">
+    </div>
+  </div>
+</div>

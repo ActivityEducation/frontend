@@ -1,0 +1,41 @@
+<div class="carousel-container" *ngIf="items.length > 0; else noItems">
+  <button
+    (click)="previous()"
+    mat-icon-button
+    class="carousel-button prev"
+    [disabled]="items.length <= 1"
+    aria-label="Previous slide"
+  >
+    <mat-icon>arrow_back_ios</mat-icon>
+  </button>
+
+  <cdk-virtual-scroll-viewport 
+    #viewport
+    orientation="horizontal" 
+    class="carousel-viewport"
+    [itemSize]="viewportWidth">
+    
+    <div *cdkVirtualFor="let item of items; templateCacheSize: 0" class="carousel-item">
+      <ng-container 
+        *ngTemplateOutlet="itemTemplate; context: { $implicit: item }">
+      </ng-container>
+    </div>
+
+  </cdk-virtual-scroll-viewport>
+
+  <button
+    (click)="next()"
+    mat-icon-button
+    class="carousel-button next"
+    [disabled]="items.length <= 1"
+    aria-label="Next slide"
+  >
+    <mat-icon>arrow_forward_ios</mat-icon>
+  </button>
+</div>
+
+<ng-template #noItems>
+  <div class="no-items-message">
+    <p>No items to display.</p>
+  </div>
+</ng-template>

@@ -1,0 +1,30 @@
+:host {
+  .top-toolbar {
+    display: flex;
+    gap: 8px;
+    flex-direction: row;
+
+    .spacer {
+      margin-left: auto;
+    }
+  }
+}
+
+::ng-deep mat-toolbar.top-toolbar {
+  border-bottom: 1px solid #e5e7eb;
+  background-color: rgb(242, 240, 234);
+  font-size: 16px;
+
+  font-family: system-ui, -apple-system "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans",
+    sans-serif, "system-ui", "Segoe UI", Helvetica, Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+  .title {
+    font-weight: 600;
+  }
+
+  img {
+    width: 32px;
+    height: 32px;
+  }
+}

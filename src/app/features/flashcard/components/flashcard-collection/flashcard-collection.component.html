@@ -1,0 +1,74 @@
+<div class="collection-layout">
+  <!-- Sidenav for Filters -->
+  <aside class="sidenav">
+    <h3>Filters</h3>
+    <app-accordion label="Card Types">
+      <button
+        mat-icon-button
+        [routerLink]="['/', 'flashcard', 'create-model']"
+        class="action"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+      <mat-selection-list>
+        @for (model of models$ | async; track model.name) {
+        <mat-list-option
+          (selectedChange)="onModelFilterChange($event, model.id)"
+          [value]="model.id"
+          togglePosition="before"
+          >{{ model.name }}</mat-list-option
+        >
+        }
+      </mat-selection-list>
+    </app-accordion>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="toolbar">
+      <mat-button-toggle-group class="view-toggle">
+        <button
+          (click)="toggleViewMode('grid')"
+          mat-button
+          [class.active]="(viewMode$ | async) === 'grid'"
+        >
+          Grid
+        </button>
+        <button
+          (click)="toggleViewMode('list')"
+          mat-button
+          [class.active]="(viewMode$ | async) === 'list'"
+        >
+          List
+        </button>
+      </mat-button-toggle-group>
+      <div class="spacer"></div>
+      <button mat-button (click)="toggleHeaders()">
+        <mat-icon>{{ showHeaders ? "toggle_on" : "toggle_off" }}</mat-icon>
+        Headers
+      </button>
+      <button mat-flat-button [routerLink]="['/flashcard/create']">
+        Create
+      </button>
+      <button mat-button [routerLink]="['/flashcard/review']">
+        Review
+      </button>
+    </div>
+
+    @let viewMode = viewMode$ | async;
+    <div class="card-area" [ngClass]="viewMode">
+      <div *ngFor="let item of displayedCards$ | async" class="card-wrapper">
+        @if (showHeaders) {
+        <mat-toolbar>
+          <span>{{ item.name }}</span>
+          <div class="spacer"></div>
+          <button mat-icon-button (click)="addToReview(item)">
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-toolbar>
+        }
+        <app-flashcard [model]="item.model" [data]="item" />
+      </div>
+    </div>
+  </main>
+</div>

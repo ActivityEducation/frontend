@@ -1,0 +1,41 @@
+<div class="creator-container">
+  <div *ngIf="!selectedModel; else creatorView" class="model-selection-view">
+    <h2>Select a Model</h2>
+    <mat-list>
+      <mat-list-item *ngFor="let model of (models$ | async)" (click)="handleModelSelection(model)">
+        <h3 matListItemTitle>{{ model.name }}</h3>
+        <p matListItemLine>{{ model.summary }}</p>
+      </mat-list-item>
+    </mat-list>
+  </div>
+
+  <ng-template #creatorView>
+    <div class="creator-layout">
+      <div class="form-panel">
+        <h2>Create Flashcard</h2>
+        <h3 class="model-name-header">{{ selectedModel?.name }}</h3>
+        <form [formGroup]="form" (ngSubmit)="handleSave()">
+          <mat-form-field appearance="outline">
+            <mat-label>Flashcard Name</mat-label>
+            <input matInput formControlName="name" placeholder="Enter a name for the flashcard">
+          </mat-form-field>
+
+          <div *ngFor="let field of selectedModel?.fields">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ field.name }}</mat-label>
+              <input matInput [formControlName]="field.id" [placeholder]="'Enter ' + field.name">
+            </mat-form-field>
+          </div>
+
+          <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">Save Flashcard</button>
+        </form>
+      </div>
+      <div class="preview-panel">
+        <h3>Preview</h3>
+        <div class="preview-wrapper">
+          <app-flashcard *ngIf="selectedModel" [model]="selectedModel" [data]="flashcardData"></app-flashcard>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

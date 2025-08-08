@@ -1,0 +1,67 @@
+<div #playerContainer class="video-player-container" (mousemove)="onMouseMove()" (mouseleave)="onMouseLeave()">
+  
+  <div *ngIf="placeholderImage && (!hasPlayed || !isPlaying)" class="placeholder-image">
+    <img [src]="placeholderImage" [alt]="title + ' placeholder'" />
+  </div>
+
+  <video #videoPlayer 
+    class="styled-video" 
+    [src]="src" 
+    [loop]="loop" 
+    [autoplay]="autoPlay" 
+    [muted]="muted"
+    (play)="onPlay()"
+    (pause)="onPause()"
+    (timeupdate)="onTimeUpdate()"
+    (loadedmetadata)="onLoadedMetadata()"
+    (volumechange)="onVolumeChange()"
+    (ended)="onEnded()"
+    (click)="togglePlayPause()">
+  </video>
+
+  <div *ngIf="isInterruptActive && currentInterrupt" class="interrupt-overlay">
+    <div class="interrupt-card">
+      <ng-container [ngTemplateOutlet]="currentInterrupt.content"></ng-container>
+      <button class="button primary" (click)="dismissInterrupt()">Continue</button>
+    </div>
+  </div>
+
+  <div class="controls-overlay" [class.show]="showControls || !isPlaying || isFullScreen">
+    <div class="progress-bar-wrapper" (click)="handleProgressSeek($event)">
+      <progress class="progress-bar" [value]="currentTime" [max]="duration || 1"></progress>
+      <div *ngFor="let interrupt of interrupts" 
+        class="interrupt-marker" 
+        [style.left.%]="(interrupt.timestampSeconds / duration) * 100"
+        [title]="'Interrupt at ' + formatTime(interrupt.timestampSeconds)">
+      </div>
+    </div>
+
+    <div class="bottom-controls">
+      <button class="button icon" (click)="togglePlayPause()" [disabled]="isInterruptActive">
+        <i class="material-icons">{{ isPlaying ? 'pause' : 'play_arrow' }}</i>
+      </button>
+
+      <div class="volume-control">
+        <button class="button icon" (click)="toggleMute()" [disabled]="isInterruptActive">
+          <i class="material-icons">
+            {{ isMuted || volume === 0 ? 'volume_off' : (volume > 0.5 ? 'volume_up' : 'volume_down') }}
+          </i>
+        </button>
+        <input type="range" class="slider" min="0" max="1" step="0.05" 
+          [value]="isMuted ? 0 : volume" 
+          (input)="handleVolumeSliderChange($event)"
+          [disabled]="isInterruptActive" />
+      </div>
+
+      <span class="time-display">
+        {{ formatTime(currentTime) }} / {{ formatTime(duration) }}
+      </span>
+
+      <div class="spacer"></div>
+
+      <button class="button icon" (click)="toggleFullScreen()" [disabled]="isInterruptActive">
+        <i class="material-icons">{{ isFullScreen ? 'fullscreen_exit' : 'fullscreen' }}</i>
+      </button>
+    </div>
+  </div>
+</div>

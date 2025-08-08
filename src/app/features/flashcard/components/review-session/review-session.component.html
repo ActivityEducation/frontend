@@ -1,0 +1,71 @@
+<!--
+* =================================================================
+*
+* ## 🎨 Review Session Page Component (Template)
+*
+* The template uses `<mat-card>`, `<app-flashcard>`, and other
+* real components.
+*
+* **File:** src/app/features/review-session/pages/review-session-page/review-session-page.component.html
+*
+* =================================================================
+-->
+<mat-card class="review-card">
+  <mat-card-content class="review-container" [ngSwitch]="true">
+
+    <!-- ===== LOADING STATE ===== -->
+    <div *ngSwitchCase="isLoading" class="state-container">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      <p>Loading your review session...</p>
+    </div>
+
+    <!-- ===== SESSION COMPLETE STATE ===== -->
+    <div *ngSwitchCase="isSessionComplete" class="state-container">
+      <h2>🎉 Session Complete!</h2>
+      <p>You reviewed {{ totalCards }} cards. Great work!</p>
+      <button mat-flat-button color="primary" (click)="restartSession()">Review Again</button>
+    </div>
+
+    <!-- ===== MAIN REVIEW STATE ===== -->
+    <div *ngSwitchDefault class="review-content-wrapper">
+      <div *ngIf="currentCard; else noCards">
+
+        <!-- Progress Bar -->
+        <div class="progress-header">
+          <span>Card {{ currentCardIndex + 1 }} of {{ totalCards }}</span>
+          <mat-progress-bar mode="determinate" [value]="progressPercentage"></mat-progress-bar>
+        </div>
+
+        <!-- Flashcard Display -->
+        <div class="flashcard-display-area">
+          <app-flashcard
+            [model]="currentCard.model"
+            [data]="currentCard.data"
+            [isFlipped]="isAnswerVisible"
+          ></app-flashcard>
+        </div>
+
+
+        <!-- Action Controls -->
+        <div class="controls-footer">
+          <div *ngIf="!isAnswerVisible; else reviewControls">
+            <button mat-flat-button color="primary" (click)="showAnswer()">Show Answer</button>
+          </div>
+          <ng-template #reviewControls>
+            <app-review-controls (rate)="submitRating($event)"></app-review-controls>
+          </ng-template>
+        </div>
+
+      </div>
+
+      <!-- ===== NO CARDS DUE STATE ===== -->
+      <ng-template #noCards>
+        <div class="state-container">
+          <h3>👍 All Done!</h3>
+          <p>You have no cards to review right now. Come back later!</p>
+        </div>
+      </ng-template>
+
+    </div>
+  </mat-card-content>
+</mat-card>

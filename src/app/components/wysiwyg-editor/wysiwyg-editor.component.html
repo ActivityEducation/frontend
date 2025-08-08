@@ -1,0 +1,98 @@
+<div class="editor-container">
+  <div class="editor-toolbar">
+    <!-- Block Format Dropdown -->
+    <select [ngModel]="currentBlockFormat" (ngModelChange)="execCommand('formatBlock', $event)" class="toolbar-select">
+      <option value="p">Paragraph</option>
+      <option value="h1">Heading 1</option>
+      <option value="h2">Heading 2</option>
+      <option value="h3">Heading 3</option>
+      <option value="h4">Heading 4</option>
+      <option value="h5">Heading 5</option>
+      <option value="h6">Heading 6</option>
+      <option value="pre">Preformatted</option>
+    </select>
+
+    <!-- Text Formatting -->
+    <div class="toolbar-group">
+      <button class="toolbar-button" (click)="execCommand('bold')" [class.active]="activeStyles.bold" title="Bold">
+        <i class="material-icons">format_bold</i>
+      </button>
+      <button class="toolbar-button" (click)="execCommand('italic')" [class.active]="activeStyles.italic" title="Italic">
+        <i class="material-icons">format_italic</i>
+      </button>
+      <button class="toolbar-button" (click)="execCommand('underline')" [class.active]="activeStyles.underline" title="Underline">
+        <i class="material-icons">format_underlined</i>
+      </button>
+      <button class="toolbar-button" (click)="execCommand('strikeThrough')" [class.active]="activeStyles.strikeThrough" title="Strikethrough">
+        <i class="material-icons">strikethrough_s</i>
+      </button>
+      <button class="toolbar-button" (click)="execCommand('removeFormat')" title="Clear Formatting">
+        <i class="material-icons">format_clear</i>
+      </button>
+    </div>
+
+    <!-- Alignment -->
+    <div class="toolbar-group">
+      <div class="dropdown">
+        <button class="toolbar-button" (click)="toggleAlignmentMenu()" title="Alignment">
+          <i class="material-icons">{{ activeAlignmentIcon }}</i>
+        </button>
+        <div class="dropdown-menu" *ngIf="alignmentMenuVisible">
+          <button (click)="execCommand('justifyLeft')"><i class="material-icons">format_align_left</i> Align Left</button>
+          <button (click)="execCommand('justifyCenter')"><i class="material-icons">format_align_center</i> Align Center</button>
+          <button (click)="execCommand('justifyRight')"><i class="material-icons">format_align_right</i> Align Right</button>
+          <button (click)="execCommand('justifyFull')"><i class="material-icons">format_align_justify</i> Justify</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lists & Blockquote -->
+    <div class="toolbar-group">
+      <button class="toolbar-button" (click)="execCommand('insertUnorderedList')" [class.active]="activeStyles.bulletList" title="Bullet List">
+        <i class="material-icons">format_list_bulleted</i>
+      </button>
+      <button class="toolbar-button" (click)="execCommand('insertOrderedList')" [class.active]="activeStyles.orderedList" title="Numbered List">
+        <i class="material-icons">format_list_numbered</i>
+      </button>
+      <button class="toolbar-button" (click)="execCommand('formatBlock', 'blockquote')" [class.active]="activeStyles.blockquote" title="Blockquote">
+        <i class="material-icons">format_quote</i>
+      </button>
+    </div>
+
+    <!-- Undo/Redo -->
+    <div class="toolbar-group">
+      <button class="toolbar-button" (click)="execCommand('undo')" title="Undo">
+        <i class="material-icons">undo</i>
+      </button>
+      <button class="toolbar-button" (click)="execCommand('redo')" title="Redo">
+        <i class="material-icons">redo</i>
+      </button>
+    </div>
+
+    <!-- Link -->
+    <div class="toolbar-group">
+      <button class="toolbar-button" (click)="handleLinkClick()" [class.active]="activeStyles.link" title="Insert/Edit Link">
+        <i class="material-icons">link</i>
+      </button>
+      <button class="toolbar-button" *ngIf="activeStyles.link" (click)="execCommand('unlink')" title="Remove Link">
+        <i class="material-icons">link_off</i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Link Input Toolbar -->
+  <div class="link-input-toolbar" *ngIf="linkInputVisible">
+    <input type="text" [(ngModel)]="linkUrl" placeholder="https://example.com" />
+    <button (click)="confirmLink()" class="button primary">Insert</button>
+    <button (click)="cancelLink()" class="button">Cancel</button>
+  </div>
+
+  <!-- Editable Area -->
+  <div #editor 
+    class="content-editable-area" 
+    contenteditable="true"
+    (input)="onContentChange()"
+    (blur)="onEditorBlur()"
+    [attr.data-placeholder]="placeholder">
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<div class="card">
+  <div *ngIf="status === 'reviewing' || status === 'submitting'" class="progress-wrapper">
+    <progress [value]="progress" max="100"></progress>
+  </div>
+
+  <ng-container [ngSwitch]="status">
+    <!-- Loading State -->
+    <div *ngSwitchCase="'loading'" class="info-message">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngSwitchCase="'error'" class="info-message">
+      <i class="material-icons error-icon">error_outline</i>
+      <h2 class="info-title">An Error Occurred</h2>
+      <p>{{ error }}</p>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngSwitchCase="'empty'" class="info-message">
+      <i class="material-icons">coffee</i>
+      <h2 class="info-title">All Done For Now!</h2>
+      <p>You have no cards to review.</p>
+    </div>
+
+    <!-- Complete State -->
+    <div *ngSwitchCase="'complete'" class="info-message">
+      <i class="material-icons success-icon">check_circle_outline</i>
+      <h2 class="info-title">Session Complete!</h2>
+      <p>You reviewed {{ dueCards.length }} cards. Great job!</p>
+    </div>
+
+    <!-- Reviewing/Submitting State -->
+    <div *ngSwitchCase="'reviewing'" class="session-container">
+      <app-flashcard 
+        *ngIf="currentCard"
+        [model]="currentCard.model" 
+        [data]="currentCard.flashcard" 
+        (flipChange)="isFlipped = $event">
+      </app-flashcard>
+      <app-review-controls 
+        (rate)="handleRate($event)" 
+        [isDisabled]="!isFlipped">
+      </app-review-controls>
+    </div>
+     <div *ngSwitchCase="'submitting'" class="session-container">
+      <app-flashcard 
+        *ngIf="currentCard"
+        [model]="currentCard.model" 
+        [data]="currentCard.flashcard" 
+        (flipChange)="isFlipped = $event">
+      </app-flashcard>
+      <app-review-controls 
+        (rate)="handleRate($event)" 
+        [isDisabled]="true">
+      </app-review-controls>
+    </div>
+  </ng-container>
+</div>

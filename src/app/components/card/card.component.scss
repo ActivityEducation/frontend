@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.card-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; // Allows for title on left, actions on right
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1.125rem; // Equivalent to h5
+  font-weight: 600;
+  color: #111827;
+}
+
+.card-content {
+  padding: 16px;
+}

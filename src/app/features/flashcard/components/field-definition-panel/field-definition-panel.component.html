@@ -1,0 +1,36 @@
+<div class="panel-container">
+  <h3>Fields</h3>
+  <div *ngIf="!readOnly" class="add-field-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Field Name</mat-label>
+      <input matInput type="text" [(ngModel)]="newFieldName" placeholder="e.g., Term, Definition" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Field Type</mat-label>
+      <select matNativeControl [(ngModel)]="newFieldType">
+        <option value="text">Text</option>
+        <option value="image">Image</option>
+        <option value="audio">Audio</option>
+        <option value="icon">Icon</option>
+      </select>
+    </mat-form-field>
+    <button mat-flat-button (click)="handleAddField()" class="add-button">Add Field</button>
+  </div>
+
+  <h4>Available Fields</h4>
+  <div *ngIf="fields.length > 0; else noFields" class="fields-list">
+    <div *ngFor="let field of fields" 
+      class="field-item"
+      [draggable]="!readOnly"
+      (dragstart)="onDragStart($event, field.id)">
+      <mat-icon>drag_indicator</mat-icon>
+      <span>{{ field.name }} ({{ field.type }})</span>
+      <button mat-icon-button *ngIf="!readOnly" (click)="handleDeleteField(field.id)" title="Delete Field">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+  <ng-template #noFields>
+    <p class="caption">No fields defined.</p>
+  </ng-template>
+</div>

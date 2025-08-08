@@ -1,0 +1,73 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.flipper-container {
+  perspective: 1000px; // Required for 3D effect
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.flipper-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition-property: transform;
+  transform-style: preserve-3d; // Required for children to have 3D position
+  aspect-ratio: 633 / 400; // Maintain the design resolution
+
+  // Flip animations
+  &.horizontal.flipped {
+    transform: rotateY(180deg);
+  }
+  &.vertical.flipped {
+    transform: rotateX(180deg);
+  }
+}
+
+.flipper-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden; // Hide the back of the element when facing away
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.flipper-front {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.flipper-back {
+  background-color: #eff6ff; // Light primary color
+  color: #1e40af; // Dark primary text color
+  border: 1px solid #bfdbfe;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+  // Position the back face correctly for the animation
+  &.horizontal {
+    transform: rotateY(180deg);
+  }
+  &.vertical {
+    transform: rotateX(180deg);
+  }
+}
+
+.default-content {
+  color: #9ca3af;
+  font-style: italic;
+}

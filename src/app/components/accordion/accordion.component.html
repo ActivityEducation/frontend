@@ -1,0 +1,14 @@
+<div class="accordion-header">
+    <button class="toggle" matButton="outlined" (click)="toggleAccordion()">
+        <span class="label">{{ label }}</span>
+        <mat-icon>{{ opened ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</mat-icon>
+    </button>
+    @if (opened) {
+        <ng-content select=".action"></ng-content>
+    }
+</div>
+<div class="accordion-content">
+    @if (opened) {
+        <ng-content></ng-content>
+    }
+</div>

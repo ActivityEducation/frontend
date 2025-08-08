@@ -1,0 +1,74 @@
+/*
+* =================================================================
+*
+* ## 💅 Review Session Page Component (Styles)
+*
+* **File:** src/app/features/review-session/pages/review-session-page/review-session-page.component.css
+*
+* =================================================================
+*/
+.review-card {
+  width: 100%;
+  max-width: 700px;
+  margin: 24px auto;
+}
+
+.review-container {
+  padding: 16px !important;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.review-content-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.state-container {
+  text-align: center;
+  color: #555;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.state-container h2, .state-container h3 {
+  color: #333;
+  margin: 0;
+}
+
+.progress-header {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.progress-header span {
+  font-size: 0.9em;
+  color: #666;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.flashcard-display-area {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.controls-footer {
+  margin-top: 16px;
+  height: 40px; /* Reserve space to prevent layout shift */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

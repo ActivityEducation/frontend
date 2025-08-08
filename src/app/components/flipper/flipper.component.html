@@ -1,0 +1,25 @@
+<div class="flipper-container" (click)="handleClick()">
+  <div 
+    class="flipper-inner" 
+    [class.flipped]="effectiveIsFlipped"
+    [class.horizontal]="flipDirection === 'horizontal'"
+    [class.vertical]="flipDirection === 'vertical'"
+    [style.transition-duration.s]="duration">
+    
+    <!-- Front Face -->
+    <div class="flipper-face flipper-front">
+      <ng-container *ngIf="frontContent" [ngTemplateOutlet]="frontContent"></ng-container>
+      <div *ngIf="!frontContent" class="default-content">Provide #front template</div>
+    </div>
+
+    <!-- Back Face -->
+    <div 
+      class="flipper-face flipper-back"
+      [class.horizontal]="flipDirection === 'horizontal'"
+      [class.vertical]="flipDirection === 'vertical'">
+      <ng-container *ngIf="backContent" [ngTemplateOutlet]="backContent"></ng-container>
+      <div *ngIf="!backContent" class="default-content">Provide #back template</div>
+    </div>
+
+  </div>
+</div>

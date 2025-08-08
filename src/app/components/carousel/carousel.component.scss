@@ -1,0 +1,44 @@
+/* Styles for the component host element */
+:host {
+  display: block;
+  width: 100%;
+  max-width: 600px;
+  margin: 2em auto;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+/* Flex container for the entire carousel */
+.carousel-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+/* The CDK viewport container */
+.carousel-viewport {
+  flex-grow: 1;
+  height: 300px; /* Example height, adjust as needed */
+  width: 100%; /* Take up the available space */
+}
+
+/* This is a crucial style. It makes each item inside the viewport
+  take up the full width of the viewport, which is necessary for the
+  one-item-at-a-time scrolling effect.
+*/
+.carousel-item {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Message shown when there's no data */
+.no-items-message {
+  text-align: center;
+  color: #6c757d;
+  padding: 2rem;
+}

@@ -1,0 +1,19 @@
+<mat-card appearance="outlined">
+  <mat-card-header class="header">
+    <mat-card-title>Welcome to EducationPub</mat-card-title>
+    <mat-card-subtitle>Next generation education</mat-card-subtitle>
+  </mat-card-header>
+  <form [formGroup]="form" (ngSubmit)="onSumbit()" class="login-form" mat-card-content>
+    <mat-form-field appearance="outline">
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username" type="text" placeholder="Username" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" type="password" placeholder="Password" />
+    </mat-form-field>
+  </form>
+  <mat-card-actions class="actions">
+    <button (click)="onSumbit()" type="submit" mat-raised-button color="primary">Login</button>
+  </mat-card-actions>
+</mat-card>

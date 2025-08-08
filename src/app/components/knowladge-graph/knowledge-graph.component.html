@@ -1,0 +1,37 @@
+<div class="graph-container">
+  <!-- Loading and Error States -->
+  <div *ngIf="isLoading" class="overlay">Loading...</div>
+  <div *ngIf="error" class="overlay error">Error: {{ error }}</div>
+
+  <!-- Search and Refresh Controls -->
+  <div class="search-container">
+    <button *ngIf="endpoint" mat-button (click)="fetchData()" class="refresh" [disabled]="isLoading">Refresh</button>
+    <input 
+      type="text" 
+      placeholder="Enter Node ID" 
+      [(ngModel)]="inputValue"
+      (keydown.enter)="handleFindClick()"
+    />
+    <button mat-button (click)="handleFindClick()">Find</button>
+  </div>
+
+  <!-- Main SVG for D3 Graph -->
+  <svg #svgContainer [attr.width]="width" [attr.height]="height"></svg>
+
+  <!-- Tooltip -->
+  <div #tooltip class="tooltip"></div>
+
+  <!-- Legend -->
+  <div class="legend-container" *ngIf="nodeTypes.length > 0">
+    <div *ngFor="let type of nodeTypes" class="legend-item">
+      <div class="legend-color-box" [ngStyle]="{'background-color': typeColorScale(type)}"></div>
+      <span>{{ type }}</span>
+    </div>
+  </div>
+
+  <!-- Zoom Controls -->
+  <div class="zoom-controls">
+    <button mat-icon-button (click)="handleZoomIn()"><mat-icon>add</mat-icon></button>
+    <button mat-icon-button (click)="handleZoomOut()"><mat-icon>remove</mat-icon></button>
+  </div>
+</div>

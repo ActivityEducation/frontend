@@ -1,0 +1,17 @@
+:host {
+  .accordion-header {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    gap: 8px;
+
+    button.toggle {
+      border-radius: 8px;
+      width: 100%;
+
+      ::ng-deep .mdc-button__label {
+        width: 100%;
+      }
+    }
+  }
+}

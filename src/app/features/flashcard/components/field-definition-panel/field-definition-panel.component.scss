@@ -1,0 +1,70 @@
+:host {
+  display: block;
+}
+
+.panel-container {
+  margin-top: 16px;
+}
+
+.add-field-form {
+  margin-bottom: 16px;
+
+  mat-form-field,
+  input,
+  select {
+    width: 100%;
+  }
+}
+
+.add-button {
+  width: 100%;
+  border-radius: 4px;
+}
+
+.fields-list {
+  margin-top: 8px;
+}
+
+.field-item {
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+
+  &[draggable="false"] {
+    cursor: default;
+  }
+}
+
+.caption {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background-color: #ffffff;
+  cursor: pointer;
+  font-size: 14px;
+
+  &.primary {
+    background-color: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+  }
+
+  &.icon {
+    background: transparent;
+    border: none;
+    padding: 4px;
+    font-size: 16px;
+    line-height: 1;
+  }
+}

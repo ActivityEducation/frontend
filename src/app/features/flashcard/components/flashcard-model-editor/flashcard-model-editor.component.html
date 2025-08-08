@@ -1,0 +1,69 @@
+<div class="editor-layout">
+  <div class="left-panel">
+    <h2>Flashcard Template</h2>
+    <div *ngIf="!readOnly; else readOnlyModelInfo" class="model-inputs">
+      <mat-form-field appearance="outline">
+        <mat-label>Model Name</mat-label>
+        <input matInput type="text" [(ngModel)]="model.name" placeholder="e.g., Vocabulary Card" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Summary</mat-label>
+        <input matInput type="text" [(ngModel)]="model.summary" placeholder="A brief description" />
+      </mat-form-field>
+    </div>
+    <ng-template #readOnlyModelInfo>
+      <div>
+        <h3>{{ model.name }}</h3>
+        <p>{{ model.summary }}</p>
+      </div>
+    </ng-template>
+
+    <app-field-definition-panel 
+      [fields]="model.fields" 
+      (fieldsChange)="onFieldsChanged($event)"
+      [readOnly]="readOnly">
+    </app-field-definition-panel>
+  </div>
+
+  <div class="right-panel">
+    <div class="toolbar">
+      <div class="toolbar-group">
+        <button mat-button (click)="toggleTemplate()">
+          <mat-icon>360</mat-icon>
+          <span>Flip</span>
+        </button>
+      </div>
+      <div class="spacer"></div>
+      <div>{{ activeTemplate }}</div>
+      <div class="spacer"></div>
+      <button *ngIf="!readOnly" color="secondary" mat-button>Cancel</button>
+      <button *ngIf="!readOnly" (click)="handleSaveClick()" mat-flat-button>Save</button>
+    </div>
+
+    <div #canvas class="template-canvas" 
+      (drop)="onDrop($event)" 
+      (dragover)="onDragOver($event)">
+      
+      <div *ngFor="let layoutItem of renderedLayoutItems" 
+        class="draggable-field"
+        [style.left.px]="layoutItem.x"
+        [style.top.px]="layoutItem.y"
+        [style.width.px]="layoutItem.width"
+        [style.height.px]="layoutItem.height"
+        (mousedown)="onMouseDown($event, layoutItem.fieldId, 'move')">
+        {{ getFieldById(layoutItem.fieldId)?.name }}
+        <div *ngIf="!readOnly" class="resize-handle bottom-right" (mousedown)="onMouseDown($event, layoutItem.fieldId, 'resize')"></div>
+      </div>
+
+      <div *ngIf="liveLayoutItemForTemplate"
+        class="draggable-field live"
+        [style.left.px]="liveLayoutItemForTemplate.x"
+        [style.top.px]="liveLayoutItemForTemplate.y"
+        [style.width.px]="liveLayoutItemForTemplate.width"
+        [style.height.px]="liveLayoutItemForTemplate.height">
+         {{ getFieldById(liveLayoutItemForTemplate.fieldId)?.name }}
+        <div *ngIf="!readOnly" class="resize-handle bottom-right"></div>
+      </div>
+    </div>
+  </div>
+</div>

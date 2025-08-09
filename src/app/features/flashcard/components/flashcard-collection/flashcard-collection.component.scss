@@ -146,3 +146,10 @@ app-flashcard.withHeader ::ng-deep .flipper-face {
     margin-inline: auto;
   }
 }
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}

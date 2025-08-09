@@ -30,7 +30,6 @@ export class SrsService {
    * @returns An Observable with the updated SpacedRepetitionScheduleEntity.
    */
   submitReview(review: SubmitReview): Observable<any> {
-    console.log(`SERVICE: Submitting review for flashcard ${review.flashcardActivityPubId} with rating ${review.rating}`);
     return this.http.post<any>(`${this.apiUrl}/review`, review);
   }
 
@@ -44,7 +43,6 @@ export class SrsService {
    * @returns An Observable array of DueFlashcard objects.
    */
   getDueFlashcards(): Observable<DueFlashcard[]> {
-    console.log('SERVICE: Fetching due flashcards from API...');
     // This now makes a real HTTP call to the backend.
     // Note: This assumes the backend returns data in the `DueFlashcard[]` shape.
     // If the shape is different, a `map` operator would be needed to transform the data.

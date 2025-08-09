@@ -10,12 +10,6 @@ export class FlashcardService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = '/api';
 
-  public getFlashcardsByUsername(username: string) {
-    return this.http.get<any>(
-      `${this.baseUrl}/actors/${username}/flashcards?perPage=25`
-    );
-  }
-
   public getFlashcardById(activityPubId: string) {
     return this.http.get<Flashcard>(activityPubId);
   }
@@ -47,8 +41,13 @@ export class FlashcardService {
     return this.http.get<Model[]>(`${this.baseUrl}/edu/flashcard-models`);
   }
 
+  public getFlashcards(page: number, limit: number) {
+    return this.http.get<{ data: Flashcard[]; total: number }>(
+      `${this.baseUrl}/edu/flashcards?page=${page}&limit=${limit}`
+    );
+  }
+
   public addFlashcardToReview(flashcard: Flashcard) {
-    console.log('addFlashToReview', flashcard);
     return this.http.post(`${this.baseUrl}/srs/review`, {
       flashcardActivityPubId: flashcard.id,
       rating: 1,

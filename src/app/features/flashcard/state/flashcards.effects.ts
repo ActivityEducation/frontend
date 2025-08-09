@@ -5,64 +5,72 @@ import {
   combineLatestWith,
   filter,
   map,
-  mergeMap,
   of,
   switchMap,
   take,
   tap,
+  withLatestFrom,
+  distinctUntilChanged,
+  combineLatest,
 } from 'rxjs';
 import { FlashcardsActions } from './flashcards.actions';
-import { LoginActions } from '../../auth/state/login.actions';
-import { JwtPayload } from '../../auth/jwt.interface';
 import { FlashcardService } from '../services/flashcard.service';
 import { Store } from '@ngrx/store';
 import { modelById } from './models.selectors';
+import {
+  selectFlashcardsPage,
+  selectFlashcardsLimit,
+  selectFlashcardsTotalPages,
+  selectAllFlashcards,
+  selectFlashcardsTotalCount,
+  selectFlashcardsLoading,
+  selectAllFlashcardsLoaded,
+} from './flashcards.selectors';
 import { EduFlashcardModel } from './model.interface';
 import { Model } from './models.reducer';
 import { Flashcard } from './flashcards.reducer';
 import { FlashcardData } from '../components/flashcard/flashcard.component';
 import { SrsService } from '../services/srs.service';
 
-export const initFlashcardsEffect = createEffect(
-  (actions$ = inject(Actions)) => {
+export const loadFlashcardsPageEffect = createEffect(
+  (actions$ = inject(Actions), flashcardService = inject(FlashcardService)) => {
     return actions$.pipe(
-      ofType(LoginActions.setCurrentUser),
-      map(({ jwt }: { jwt: JwtPayload }) =>
-        FlashcardsActions.loadFlashcards({ username: jwt.username })
+      ofType(FlashcardsActions.loadFlashcardsPage),
+      switchMap(({ page, limit }) =>
+        flashcardService.getFlashcards(page, limit).pipe(
+          map((response) => {
+            return FlashcardsActions.loadFlashcardsPageSuccess({
+              flashcards: response.data,
+              totalCount: response.total,
+              page,
+              limit,
+            });
+          }),
+          catchError((error) =>
+            of(
+              FlashcardsActions.loadFlashcardsPageFailure({ error }),
+              FlashcardsActions.setLoadingStatus({ loading: false }),
+              FlashcardsActions.setAllFlashcardsLoaded({ loaded: false })
+            )
+          )
+        )
       )
     );
   },
   { functional: true }
 );
 
-export const loadFlashcardsEffect = createEffect(
-  (actions$ = inject(Actions), flashcardService = inject(FlashcardService)) => {
-    return actions$.pipe(
-      ofType(FlashcardsActions.loadFlashcards),
-      switchMap(({ username }) =>
-        flashcardService.getFlashcardsByUsername(username)
-      ),
-      switchMap((flashcards) => {
-        return flashcards.orderedItems.map((id: string) => {
-          return FlashcardsActions.loadFlashcard({ activityPubId: id });
-        }) as any[];
-      })
-    );
-  },
-  { functional: true, dispatch: true }
-);
-
 export const loadFlashcardEffect = createEffect(
   (actions$ = inject(Actions), flashcardService = inject(FlashcardService)) => {
     return actions$.pipe(
       ofType(FlashcardsActions.loadFlashcard),
-      mergeMap(({ activityPubId }) =>
+      switchMap(({ activityPubId }) =>
         flashcardService.getFlashcardById(activityPubId).pipe(
           map((flashcard) => {
             return FlashcardsActions.loadFlashcardSuccess({ data: flashcard });
           }),
           catchError((error) => {
-            return [FlashcardsActions.loadModelFailure({ error })];
+            return of(FlashcardsActions.loadFlashcardFailure({ error }));
           })
         )
       )
@@ -115,10 +123,8 @@ export const loadModelsEffect = createEffect(
     actions$.pipe(
       ofType(FlashcardsActions.loadModels),
       switchMap(() => flashcardService.getAllModels()),
-      switchMap((models: Model[]) =>
-        models.map((model) =>
-          FlashcardsActions.loadModelSuccess({ data: model })
-        )
+      map((models: Model[]) =>
+        FlashcardsActions.loadModelsSuccess({ data: models })
       )
     ),
   { functional: true, dispatch: true }
@@ -148,10 +154,99 @@ export const addFlashcardToReviewEffect = createEffect(
   (actions$ = inject(Actions), SRSService = inject(SrsService)) =>
     actions$.pipe(
       ofType(FlashcardsActions.addToReview),
-      tap((action) => console.log('addFlashcardToReviewEffect', action)),
       switchMap(({ flashcard }: { flashcard: Flashcard }) =>
         SRSService.addToReview({ flashcardActivityPubId: flashcard.id })
       )
     ),
   { functional: true, dispatch: false }
+);
+
+export const nextPageEffect = createEffect(
+  (actions$ = inject(Actions), store = inject(Store)) => {
+    return actions$.pipe(
+      ofType(FlashcardsActions.nextPage),
+      withLatestFrom(
+        store.select(selectFlashcardsPage),
+        store.select(selectFlashcardsTotalPages)
+      ),
+      filter(([, currentPage, totalPages]) => currentPage < totalPages),
+      map(([, currentPage]) =>
+        FlashcardsActions.changePage({ page: currentPage + 1 })
+      )
+    );
+  },
+  { functional: true }
+);
+
+export const previousPageEffect = createEffect(
+  (actions$ = inject(Actions), store = inject(Store)) => {
+    return actions$.pipe(
+      ofType(FlashcardsActions.previousPage),
+      withLatestFrom(store.select(selectFlashcardsPage)),
+      filter(([, currentPage]) => currentPage > 1),
+      map(([, currentPage]) =>
+        FlashcardsActions.changePage({ page: currentPage - 1 })
+      )
+    );
+  },
+  { functional: true }
+);
+
+export const loadFlashcardsOnStateChangeEffect = createEffect(
+  (actions$ = inject(Actions), store = inject(Store)) => {
+    return combineLatest([
+      store.select(selectFlashcardsPage),
+      store.select(selectFlashcardsLimit),
+    ]).pipe(
+      distinctUntilChanged(
+        (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
+      ),
+      map(([page, limit]) =>
+        FlashcardsActions.loadFlashcardsPage({ page, limit })
+      )
+    );
+  },
+  { functional: true }
+);
+
+export const setAllFlashcardsLoadedEffect = createEffect(
+  (actions$ = inject(Actions), store = inject(Store)) => {
+    return actions$.pipe(
+      ofType(FlashcardsActions.loadFlashcardsPageSuccess),
+      withLatestFrom(
+        store.select(selectAllFlashcards),
+        store.select(selectFlashcardsTotalCount)
+      ),
+      map(([, allFlashcards, totalCount]) => {
+        if (allFlashcards.length >= totalCount) {
+          return FlashcardsActions.setAllFlashcardsLoaded({ loaded: true });
+        } else {
+          return FlashcardsActions.setAllFlashcardsLoaded({ loaded: false });
+        }
+      })
+    );
+  },
+  { functional: true }
+);
+
+export const loadNextPageOnScrollEffect = createEffect(
+  (actions$ = inject(Actions), store = inject(Store)) => {
+    return actions$.pipe(
+      ofType(FlashcardsActions.scrollReachedBottom),
+      withLatestFrom(
+        store.select(selectFlashcardsLoading),
+        store.select(selectAllFlashcardsLoaded),
+        store.select(selectFlashcardsPage),
+        store.select(selectFlashcardsLimit)
+      ),
+      filter(([, loading, allLoaded]) => !loading && !allLoaded),
+      map(([, , , currentPage, currentLimit]) =>
+        FlashcardsActions.loadFlashcardsPage({
+          page: currentPage + 1,
+          limit: currentLimit,
+        })
+      )
+    );
+  },
+  { functional: true }
 );

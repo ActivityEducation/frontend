@@ -5,21 +5,22 @@
       <button mat-icon-button [routerLink]="['/', 'editor']" class="action">
         <mat-icon>add</mat-icon>
       </button>
-      <mat-selection-list>
-        @for (model of models$ | async; track model.name) {
-        <mat-list-option
-          (selectedChange)="onModelFilterChange($event, model.id)"
-          [value]="model.id"
-          togglePosition="before"
-          >{{ model.name }}</mat-list-option
-        >
+      <mat-selection-list
+        [ngModel]="selectedModelIds$ | async"
+        (selectionChange)="onModelFilterChange($event)"
+        [multiple]="true"
+      >
+        @for (model of models$ | async; track model.id) {
+        <mat-list-option [value]="model.id" togglePosition="before">
+          {{ model.name }}
+        </mat-list-option>
         }
       </mat-selection-list>
     </app-accordion>
   </aside>
 
   <!-- Main Content -->
-  <main class="main-content">
+  <main #mainContent class="main-content" (scroll)="onScroll($event)">
     <div class="toolbar">
       <mat-button-toggle-group class="view-toggle">
         <button
@@ -54,20 +55,28 @@
 
     @let viewMode = viewMode$ | async;
     <div class="card-area" [ngClass]="viewMode">
-      <div *ngFor="let item of displayedCards$ | async" class="card-wrapper">
-        <app-flashcard
-          [ngClass]="{ withHeader: showHeaders }"
-          [model]="item.model"
-          [data]="item"
-        />
-        @if (showHeaders) {
-        <mat-toolbar class="card-header">
-          <div class="spacer"></div>
-          <button mat-icon-button (click)="addToReview(item)">
-            <mat-icon>add</mat-icon>
-          </button>
-        </mat-toolbar>
-        }
+      @let _items = (displayedCards$ | async); @for (item of _items; track item.id) {
+        <div class="card-wrapper">
+          <app-flashcard
+            [ngClass]="{ withHeader: showHeaders }"
+            [data]="item"
+            [model]="item.model"
+          ></app-flashcard>
+
+          @if (showHeaders) {
+            <mat-toolbar class="card-header">
+              <div class="spacer"></div>
+              <button mat-icon-button (click)="addToReview(item)">
+                <mat-icon>add</mat-icon>
+              </button>
+            </mat-toolbar>
+          }
+        </div>
+      }
+    </div>
+    <div class="pagination-controls">
+      <div *ngIf="loading$ | async" class="spinner-container">
+        <mat-spinner></mat-spinner>
       </div>
     </div>
   </main>

@@ -1,0 +1,9 @@
+<div class="widget-container">
+  <h3>Knowledge Graph Stats</h3>
+  <div *ngIf="loading$ | async">Loading...</div>
+  @let stats = stats$ | async;
+  <div *ngIf="(stats) && !(loading$ | async)">
+    <p>Nodes: {{ stats.nodes.length }}</p>
+    <p>Edges: {{ stats.edges.length }}</p>
+  </div>
+</div>

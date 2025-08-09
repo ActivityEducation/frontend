@@ -4,7 +4,7 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 import { routes } from './app.routes';
@@ -21,14 +21,17 @@ import {
   addFlashcardToReviewEffect,
   createFlashcardEffect,
   createModelEffect,
-  initFlashcardsEffect,
   loadFlashcardEffect,
-  loadFlashcardsEffect,
+  loadFlashcardsPageEffect,
   loadModelEffect,
   loadModelsEffect,
+  loadNextPageOnScrollEffect,
 } from './features/flashcard/state/flashcards.effects';
 import { authInterceptor } from './features/auth/interceptors/auth.interceptor';
 import { SrsService } from './features/flashcard/services/srs.service';
+import { loadReviewScheduleEffect } from './features/dashboard/state';
+import { loadRecentFlashcards$ } from './features/dashboard/state/recent-flashcards/recent-flashcards.effects';
+import { loadKnowledgeGraphStats$ } from './features/dashboard/state/knowledge-graph-stats/knowledge-graph-stats.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -36,19 +39,27 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideHttpClient(withInterceptors([authInterceptor])),
-    provideRouter(routes),
+    provideRouter(
+      routes,
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'enabled',
+      })
+    ),
     provideStore(reducers),
     provideEffects({
       loginEffect,
       loginSuccessEffect,
-      initFlashcardsEffect,
-      loadFlashcardsEffect,
+      loadFlashcardsPageEffect,
       loadFlashcardEffect,
       loadModelEffect,
       loadModelsEffect,
       createModelEffect,
       createFlashcardEffect,
       addFlashcardToReviewEffect,
+      loadReviewScheduleEffect,
+      loadRecentFlashcards$,
+      loadKnowledgeGraphStats$,
+      loadNextPageOnScrollEffect,
     }),
     provideRouterStore(),
     provideStoreDevtools({

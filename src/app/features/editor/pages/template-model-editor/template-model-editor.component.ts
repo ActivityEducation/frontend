@@ -293,7 +293,6 @@ export class TemplateModelEditorComponent {
     };
 
     this.store.dispatch(FlashcardsActions.createModel({ model: finalModel }));
-    console.log(finalModel);
     this.save.emit(finalModel);
   }
 

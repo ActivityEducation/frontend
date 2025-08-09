@@ -1,0 +1,8 @@
+<div class="widget-container">
+  <h3>Flashcard Models</h3>
+  <ul>
+    <li *ngFor="let model of models$ | async">
+      <span class="model-name">{{ model.name }}</span>
+    </li>
+  </ul>
+</div>

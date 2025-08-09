@@ -1,6 +1,11 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { adapter, State as FeatureState, Flashcard } from './flashcards.reducer';
+import {
+  adapter,
+  State as FeatureState,
+  Flashcard,
+} from './flashcards.reducer';
 import { allModels } from './models.selectors';
+import { Model } from './models.reducer';
 
 export const flashcardsFeatureKey = 'flashcards';
 
@@ -9,27 +14,63 @@ export const flashcardsFeature =
 
 const entitySelectors = adapter.getSelectors();
 
-export const flashcards = createSelector(
+export const selectAllFlashcards = createSelector(
   flashcardsFeature,
-  entitySelectors.selectEntities,
+  entitySelectors.selectAll
 );
 
-export const allFlashcards = createSelector(
-  flashcards,
-  (flashcards) => Object.values(flashcards) as Flashcard[],
-)
+export const selectFlashcardsTotalCount = createSelector(
+  flashcardsFeature,
+  (state) => state.totalCount
+);
 
-export const combinedFlashcard = createSelector(
-  allFlashcards,
-  allModels,
-  (flashcards, models) => flashcards.map(flashcard => {
-    if (!flashcard) return null;
-    const model = models.find(m => m?.activityPubId === flashcard?.['edu:model']);
-    if (!model) return null;
+export const selectFlashcardsPage = createSelector(
+  flashcardsFeature,
+  (state) => state.page
+);
 
-    return {
-      ...flashcard,
-      model: model,
-    }
-  }).filter(item => item !== null)
-)
+export const selectFlashcardsLimit = createSelector(
+  flashcardsFeature,
+  (state) => state.limit
+);
+
+export const selectFlashcardsTotalPages = createSelector(
+  selectFlashcardsTotalCount,
+  selectFlashcardsLimit,
+  (totalCount, limit) => (limit === 0 ? 0 : Math.ceil(totalCount / limit))
+);
+
+export const selectSelectedModelIds = createSelector(
+  flashcardsFeature,
+  (state) => state.selectedModelIds
+);
+
+export const selectFlashcardsWithModels = createSelector(
+  selectAllFlashcards,
+  selectSelectedModelIds,
+  (flashcards, selectedModelIds) => {
+    return flashcards
+      .map((flashcard) => {
+        return {
+          ...flashcard,
+          model: (flashcard as any).eduModel,
+        } as Flashcard & { model: Model };
+      })
+      .filter((flashcards) => flashcards.model !== null)
+      .filter((flashcards) =>
+        selectedModelIds.length == 0
+          ? true
+          : selectedModelIds.includes(flashcards.model.id)
+      );
+  }
+);
+
+export const selectFlashcardsLoading = createSelector(
+  flashcardsFeature,
+  (state) => state.loading
+);
+
+export const selectAllFlashcardsLoaded = createSelector(
+  flashcardsFeature,
+  (state) => state.allFlashcardsLoaded
+);

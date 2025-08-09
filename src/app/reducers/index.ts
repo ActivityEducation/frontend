@@ -10,6 +10,9 @@ import { reducer as authReducer, State as authState } from '../features/auth/sta
 import { reducer as actorReducer, State as actorState } from '../features/actor/state/actor.reducer';
 import { reducer as flashcardReducer, State as flashcardState } from '../features/flashcard/state/flashcards.reducer';
 import { reducer as modelReducer, State as modelState } from '../features/flashcard/state/models.reducer';
+import { reducer as reviewScheduleReducer, State as reviewScheduleState } from '../features/dashboard/state/review-schedule.reducer';
+import { reducer as recentFlashcardsReducer, State as recentFlashcardsState } from '../features/dashboard/state/recent-flashcards/recent-flashcards.reducer';
+import { reducer as knowledgeGraphStatsReducer, State as knowledgeGraphStatsState } from '../features/dashboard/state/knowledge-graph-stats/knowledge-graph-stats.reducer';
 
 export const stateFeatureKey = 'state';
 
@@ -17,7 +20,10 @@ export interface State {
   auth: authState,
   actors: actorState,
   flashcards: flashcardState,
-  models: modelState
+  models: modelState,
+  reviewSchedule: reviewScheduleState,
+  recentFlashcards: recentFlashcardsState,
+  knowledgeGraphStats: knowledgeGraphStatsState,
 }
 
 export const reducers: ActionReducerMap<State> = {
@@ -25,6 +31,9 @@ export const reducers: ActionReducerMap<State> = {
   actors: actorReducer,
   flashcards: flashcardReducer,
   models: modelReducer,
+  reviewSchedule: reviewScheduleReducer,
+  recentFlashcards: recentFlashcardsReducer,
+  knowledgeGraphStats: knowledgeGraphStatsReducer,
 };
 
 

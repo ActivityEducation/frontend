@@ -50,5 +50,8 @@ export const reducer = createReducer(
   initialState,
   on(FlashcardsActions.loadModelSuccess, (state, { data: model }) =>
     adapter.upsertOne(model, state)
+  ),
+  on(FlashcardsActions.loadModelsSuccess, (state, { data: models }) =>
+    adapter.setAll(models, state)
   )
 );

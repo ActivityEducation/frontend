@@ -1,0 +1,19 @@
+<div class="widget-container">
+  <h2>Upcoming Reviews</h2>
+  <div *ngIf="loading$ | async">Loading...</div>
+  <ul *ngIf="!(loading$ | async)">
+    <li *ngFor="let item of schedule$ | async">
+      <div class="item-details">
+        <span class="model-name">{{ item.flashcard.eduModel.name }}</span>
+        <span class="flashcard-name">{{ item.flashcard.name }}</span>
+      </div>
+      <div class="item-metrics">
+        <span>Last Reviewed: {{ item.last_review | date }}</span>
+        <span>Due: {{ item.due | date }}</span>
+        <span>Stability: {{ item.stability }}</span>
+        <span>Difficulty: {{ item.difficulty }}</span>
+        <span>Lapses: {{ item.lapses }}</span>
+      </div>
+    </li>
+  </ul>
+</div>

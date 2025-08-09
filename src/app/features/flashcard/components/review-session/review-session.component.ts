@@ -72,7 +72,6 @@ export class ReviewSessionPageComponent implements OnInit {
         this.dueCards = cards;
         this.totalCards = cards.length;
         this.isLoading = false; // Stop spinner on success
-        console.log(`PAGE: Fetched ${this.totalCards} cards.`);
         this.cdr.detectChanges(); // Manually trigger change detection
       },
       error: (err) => {
@@ -107,7 +106,6 @@ export class ReviewSessionPageComponent implements OnInit {
 
     this.srsService.submitReview({ flashcardActivityPubId, rating }).subscribe({
         next: (response) => {
-            console.log(`PAGE: Review submitted successfully for ${flashcardActivityPubId}. New schedule:`, response);
             this.advanceToNextCard();
         },
         error: (err) => {
@@ -125,7 +123,6 @@ export class ReviewSessionPageComponent implements OnInit {
       this.isAnswerVisible = false; // Reset flip state for the next card
     } else {
       this.isSessionComplete = true;
-      console.log('PAGE: Session complete!');
     }
     this.cdr.detectChanges(); // Ensure UI updates after advancing
   }

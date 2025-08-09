@@ -1,0 +1,7 @@
+<div class="widget-container">
+  <h3>Due Flashcards</h3>
+  <div *ngIf="loading$ | async">Loading...</div>
+  <div *ngIf="!(loading$ | async)">
+    <p class="count">{{ dueCount$ | async }}</p>
+  </div>
+</div>

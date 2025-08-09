@@ -1,0 +1,10 @@
+<div class="widget-container">
+  <h3>Recent Flashcards</h3>
+  <div *ngIf="loading$ | async">Loading...</div>
+  <ul *ngIf="!(loading$ | async)">
+    <li *ngFor="let flashcard of flashcards$ | async">
+      <span class="flashcard-name">{{ flashcard.name }}</span>
+      <span class="model-name">{{ flashcard.eduModel.name }}</span>
+    </li>
+  </ul>
+</div>

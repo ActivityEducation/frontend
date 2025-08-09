@@ -1,0 +1,29 @@
+:host {
+  display: block;
+}
+
+.fields-list {
+  margin-top: 8px;
+}
+
+.field-item {
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+
+  &[draggable="false"] {
+    cursor: default;
+  }
+}
+
+.caption {
+  font-size: 12px;
+  text-align: center;
+  color: #6b7280;
+}

@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { AvailableFieldsComponent } from '../available-fields/available-fields.component';
 
 // --- Type Definitions ---
 export interface EduFieldDefinition {
@@ -22,7 +23,7 @@ export interface EduFieldDefinition {
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatIconModule,
+    MatIconModule
   ],
   templateUrl: './field-definition-panel.component.html',
   styleUrls: ['./field-definition-panel.component.scss'],
@@ -30,6 +31,7 @@ export interface EduFieldDefinition {
 export class FieldDefinitionPanelComponent {
   @Input() fields: EduFieldDefinition[] = [];
   @Input() readOnly = false;
+  @Input() showAvailableFields = true;
   @Output() fieldsChange = new EventEmitter<EduFieldDefinition[]>();
 
   public newFieldName = '';

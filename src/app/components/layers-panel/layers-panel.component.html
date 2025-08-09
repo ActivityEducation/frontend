@@ -1,0 +1,13 @@
+<div class="layers-list" (dragover)="onDragOver($event)">
+  <div *ngFor="let layer of layers; let i = index" 
+    class="layer-item"
+    draggable="true"
+    (dragstart)="onDragStart($event, i)"
+    (drop)="onDrop($event, i)">
+    <mat-icon>drag_indicator</mat-icon>
+    <span>{{ getFieldById(layer.fieldId)?.name }}</span>
+  </div>
+  @if (layers.length == 0) {
+    <p class="caption">No layers applied.</p>
+  }
+</div>

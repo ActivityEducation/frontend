@@ -1,0 +1,25 @@
+:host {
+  display: block;
+}
+
+.layers-list {
+  margin-top: 8px;
+}
+
+.layer-item {
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+}
+
+.caption {
+  font-size: 12px;
+  text-align: center;
+  color: #6b7280;
+}

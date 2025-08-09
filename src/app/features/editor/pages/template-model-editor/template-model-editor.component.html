@@ -1,68 +1,154 @@
 <mat-sidenav-container class="editor-layout">
   <mat-sidenav mode="side" opened class="left-panel">
-    <h2>Template Model</h2>
-    <div *ngIf="!readOnly; else readOnlyModelInfo" class="model-inputs">
-      <mat-form-field appearance="outline">
-        <mat-label>Model Name</mat-label>
-        <input matInput type="text" [(ngModel)]="model.name" placeholder="e.g., Vocabulary Card" />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Summary</mat-label>
-        <input matInput type="text" [(ngModel)]="model.summary" placeholder="A brief description" />
-      </mat-form-field>
-    </div>
-    <ng-template #readOnlyModelInfo>
-      <div>
-        <h3>{{ model.name }}</h3>
-        <p>{{ model.summary }}</p>
+    <app-accordion label="General">
+      <div *ngIf="!readOnly; else readOnlyModelInfo" class="model-inputs">
+        <mat-form-field appearance="outline">
+          <mat-label>Template Name</mat-label>
+          <input
+            matInput
+            type="text"
+            [(ngModel)]="model.name"
+            placeholder="e.g., Vocabulary Card"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Summary</mat-label>
+          <input
+            matInput
+            type="text"
+            [(ngModel)]="model.summary"
+            placeholder="A brief description"
+          />
+        </mat-form-field>
       </div>
-    </ng-template>
+      <ng-template #readOnlyModelInfo>
+        <div>
+          <h3>{{ model.name }}</h3>
+          <p>{{ model.summary }}</p>
+        </div>
+      </ng-template>
+    </app-accordion>
 
-    <app-field-definition-panel 
-      [fields]="model.fields" 
-      (fieldsChange)="onFieldsChanged($event)"
-      [readOnly]="readOnly">
-    </app-field-definition-panel>
+    <app-accordion label="Fields">
+      <app-field-definition-panel
+        [fields]="model.fields"
+        (fieldsChange)="onFieldsChanged($event)"
+        [readOnly]="readOnly"
+      >
+      </app-field-definition-panel>
+    </app-accordion>
   </mat-sidenav>
-  <mat-sidenav-content class="right-panel">
+  <mat-sidenav-content class="content-panel">
     <div class="toolbar">
-      <div class="toolbar-group">
-        <button mat-button (click)="toggleTemplate()">
-          <mat-icon>360</mat-icon>
-          <span>Flip</span>
-        </button>
-      </div>
-      <div class="spacer"></div>
+      <div>Flashcard Template</div>
+      <div>/</div>
       <div>{{ activeTemplate }}</div>
       <div class="spacer"></div>
-      <button *ngIf="!readOnly" color="secondary" mat-button>Cancel</button>
-      <button *ngIf="!readOnly" (click)="handleSaveClick()" mat-flat-button>Save</button>
+      <button mat-button (click)="toggleTemplate()">
+        <mat-icon>flip</mat-icon>
+        <span>Flip</span>
+      </button>
+      <button *ngIf="!readOnly" (click)="handleSaveClick()" mat-flat-button>
+        <mat-icon>publish</mat-icon>
+        Publish
+      </button>
     </div>
 
-    <div #canvas class="template-canvas" 
-      (drop)="onDrop($event)" 
-      (dragover)="onDragOver($event)">
-      
-      <div *ngFor="let layoutItem of renderedLayoutItems" 
-        class="draggable-field"
-        [style.left.px]="layoutItem.x"
-        [style.top.px]="layoutItem.y"
-        [style.width.px]="layoutItem.width"
-        [style.height.px]="layoutItem.height"
-        (mousedown)="onMouseDown($event, layoutItem.fieldId, 'move')">
-        {{ getFieldById(layoutItem.fieldId)?.name }}
-        <div *ngIf="!readOnly" class="resize-handle bottom-right" (mousedown)="onMouseDown($event, layoutItem.fieldId, 'resize')"></div>
-      </div>
+    <app-flipper [isFlipped]="activeTemplate === 'Back'" [flipOnClick]="false">
+      <ng-template #front>
+          <div
+            #canvas
+            class="template-canvas"
+            (drop)="onDrop($event)"
+            (dragover)="onDragOver($event)"
+          >
+            @if (activeTemplate === 'Front') {
+              <div
+                *ngFor="let layoutItem of renderedLayoutItems"
+                class="draggable-field"
+                [style.left.px]="layoutItem.x"
+                [style.top.px]="layoutItem.y"
+                [style.width.px]="layoutItem.width"
+                [style.height.px]="layoutItem.height"
+                (mousedown)="onMouseDown($event, layoutItem.fieldId, 'move')"
+              >
+                {{ getFieldById(layoutItem.fieldId)?.name }}
+                <div
+                  *ngIf="!readOnly"
+                  class="resize-handle bottom-right"
+                  (mousedown)="onMouseDown($event, layoutItem.fieldId, 'resize')"
+                ></div>
+              </div>
+            
+              <div
+                *ngIf="liveLayoutItemForTemplate"
+                class="draggable-field live"
+                [style.left.px]="liveLayoutItemForTemplate.x"
+                [style.top.px]="liveLayoutItemForTemplate.y"
+                [style.width.px]="liveLayoutItemForTemplate.width"
+                [style.height.px]="liveLayoutItemForTemplate.height"
+              >
+                {{ getFieldById(liveLayoutItemForTemplate.fieldId)?.name }}
+                <div *ngIf="!readOnly" class="resize-handle bottom-right"></div>
+              </div>
+            }
+          </div>
+      </ng-template>
+      <ng-template #back>
+        <div
+          #canvas
+          class="template-canvas"
+          (drop)="onDrop($event)"
+          (dragover)="onDragOver($event)"
+        >
+          @if (activeTemplate === 'Back') {
+            <div
+              *ngFor="let layoutItem of renderedLayoutItems"
+              class="draggable-field"
+              [style.left.px]="layoutItem.x"
+              [style.top.px]="layoutItem.y"
+              [style.width.px]="layoutItem.width"
+              [style.height.px]="layoutItem.height"
+              (mousedown)="onMouseDown($event, layoutItem.fieldId, 'move')"
+            >
+              {{ getFieldById(layoutItem.fieldId)?.name }}
+              <div
+                *ngIf="!readOnly"
+                class="resize-handle bottom-right"
+                (mousedown)="onMouseDown($event, layoutItem.fieldId, 'resize')"
+              ></div>
+            </div>
 
-      <div *ngIf="liveLayoutItemForTemplate"
-        class="draggable-field live"
-        [style.left.px]="liveLayoutItemForTemplate.x"
-        [style.top.px]="liveLayoutItemForTemplate.y"
-        [style.width.px]="liveLayoutItemForTemplate.width"
-        [style.height.px]="liveLayoutItemForTemplate.height">
-         {{ getFieldById(liveLayoutItemForTemplate.fieldId)?.name }}
-        <div *ngIf="!readOnly" class="resize-handle bottom-right"></div>
-      </div>
-    </div>
+            <div
+              *ngIf="liveLayoutItemForTemplate"
+              class="draggable-field live"
+              [style.left.px]="liveLayoutItemForTemplate.x"
+              [style.top.px]="liveLayoutItemForTemplate.y"
+              [style.width.px]="liveLayoutItemForTemplate.width"
+              [style.height.px]="liveLayoutItemForTemplate.height"
+            >
+              {{ getFieldById(liveLayoutItemForTemplate.fieldId)?.name }}
+              <div *ngIf="!readOnly" class="resize-handle bottom-right"></div>
+            </div>
+          }
+        </div>
+      </ng-template>
+    </app-flipper>
   </mat-sidenav-content>
+  <mat-sidenav mode="side" opened position="end" class="right-panel">
+    <app-accordion label="Layers">
+      <app-layers-panel
+        [layers]="currentTemplate.layout"
+        [fields]="model.fields"
+        (layersChange)="onLayersChanged($event)"
+      >
+      </app-layers-panel>
+    </app-accordion>
+    <app-accordion label="Available Fields">
+      <app-available-fields
+        [fields]="model.fields"
+        [readOnly]="readOnly"
+      ></app-available-fields>
+    </app-accordion>
+  </mat-sidenav>
 </mat-sidenav-container>

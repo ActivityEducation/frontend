@@ -1,0 +1,12 @@
+<div *ngIf="fields.length > 0; else noFields" class="fields-list">
+  <div *ngFor="let field of fields" 
+    class="field-item"
+    [draggable]="!readOnly"
+    (dragstart)="onDragStart($event, field.id)">
+    <mat-icon>drag_indicator</mat-icon>
+    <span>{{ field.name }} ({{ field.type }})</span>
+  </div>
+</div>
+<ng-template #noFields>
+  <p class="caption">No fields defined.</p>
+</ng-template>

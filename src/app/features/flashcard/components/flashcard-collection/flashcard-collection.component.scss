@@ -8,12 +8,33 @@
   height: calc(100vh - 64px); // Example height
 }
 
+.card-header {
+  background-color: #ededed;
+  border-radius: 12px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border: 1px solid #d2d2d2;
+  border-top: 0px;
+  margin-top: -2px;
+}
+
+app-flashcard.withHeader ::ng-deep .card-container,
+app-flashcard.withHeader ::ng-deep .flashcard-wrapper,
+app-flashcard.withHeader ::ng-deep .flipper-face {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
 .sidenav {
   width: 260px;
   flex-shrink: 0;
+  border-right: 1px solid #e0e0e0;
+  border-radius: 0px;
+  display: flex;
+  flex-direction: column;
+  background-color: #f6f6f6;
   padding: 16px;
-  border-right: 1px solid #e5e7eb;
-  background-color: #f2f0ea;
+  overflow-y: auto;
 }
 
 .filter-group {

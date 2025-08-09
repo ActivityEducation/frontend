@@ -24,6 +24,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { EduCardTemplate, EduFieldLayout, EduFlashcardModel } from '../../../flashcard/state/model.interface';
 import { Store } from '@ngrx/store';
 import { FlashcardsActions } from '../../../flashcard/state/flashcards.actions';
+import { AccordionComponent } from '../../../../components/accordion/accordion.component';
+import { AvailableFieldsComponent } from '../../../../components/available-fields/available-fields.component';
+import { LayersPanelComponent } from '../../../../components/layers-panel/layers-panel.component';
+import { FlipperComponent } from '../../../../components/flipper/flipper.component';
 
 // --- Type Definitions ---
 
@@ -45,6 +49,10 @@ const snapToGrid = (value: number) => Math.round(value / GRID_SIZE) * GRID_SIZE;
     MatInputModule,
     MatSelectModule,
     MatSidenavModule,
+    AccordionComponent,
+    AvailableFieldsComponent,
+    LayersPanelComponent,
+    FlipperComponent,
   ],
   templateUrl: './template-model-editor.component.html',
   styleUrls: ['./template-model-editor.component.scss'],
@@ -110,6 +118,10 @@ export class TemplateModelEditorComponent {
 
   onFieldsChanged(fields: EduFieldDefinition[]): void {
     this.model.fields = fields;
+  }
+
+  onLayersChanged(newLayout: EduFieldLayout[]): void {
+    this.updateTemplateLayout(newLayout);
   }
 
   onDrop(event: DragEvent): void {

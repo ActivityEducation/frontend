@@ -38,27 +38,12 @@
   height: 100%;
   -webkit-backface-visibility: hidden; /* Safari */
   backface-visibility: hidden; // Hide the back of the element when facing away
-  display: flex;
-  justify-content: center;
-  align-items: center;
   border-radius: 8px;
   overflow: hidden;
   box-sizing: border-box;
 }
 
-.flipper-front {
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
 .flipper-back {
-  background-color: #eff6ff; // Light primary color
-  color: #1e40af; // Dark primary text color
-  border: 1px solid #bfdbfe;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-
-  // Position the back face correctly for the animation
   &.horizontal {
     transform: rotateY(180deg);
   }

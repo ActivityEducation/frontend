@@ -1,4 +1,4 @@
-import { EduFieldDefinition } from "../components/field-definition-panel/field-definition-panel.component";
+import { EduFieldDefinition } from "../models/flashcard.model";
 
 export interface EduFieldLayout {
   fieldId: string;

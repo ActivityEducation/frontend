@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import {
   EduFieldDefinition,
 } from '../../../../components/field-definition-panel/field-definition-panel.component';
@@ -20,9 +21,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { EduCardTemplate, EduFieldLayout, EduFlashcardModel } from '../../state/model.interface';
+import { EduCardTemplate, EduFieldLayout, EduFlashcardModel } from '../../../flashcard/state/model.interface';
 import { Store } from '@ngrx/store';
-import { FlashcardsActions } from '../../state/flashcards.actions';
+import { FlashcardsActions } from '../../../flashcard/state/flashcards.actions';
 
 // --- Type Definitions ---
 
@@ -32,7 +33,7 @@ const CANVAS_MARGIN = 8;
 const snapToGrid = (value: number) => Math.round(value / GRID_SIZE) * GRID_SIZE;
 
 @Component({
-  selector: 'app-flashcard-model-editor',
+  selector: 'app-template-model-editor',
   standalone: true,
   imports: [
     CommonModule,
@@ -43,11 +44,12 @@ const snapToGrid = (value: number) => Math.round(value / GRID_SIZE) * GRID_SIZE;
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatSidenavModule,
   ],
-  templateUrl: './flashcard-model-editor.component.html',
-  styleUrls: ['./flashcard-model-editor.component.scss'],
+  templateUrl: './template-model-editor.component.html',
+  styleUrls: ['./template-model-editor.component.scss'],
 })
-export class FlashcardModelEditorComponent {
+export class TemplateModelEditorComponent {
   @Input() initialModelData?: EduFlashcardModel;
   @Input() readOnly = false;
   @Output() save = new EventEmitter<EduFlashcardModel>();

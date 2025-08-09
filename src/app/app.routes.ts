@@ -31,6 +31,12 @@ export const routes: Routes = [
           import('./features/flashcard/flashcard.routes').then((m) => m.routes),
       },
       {
+        path: 'editor',
+        canActivate: [authGuard],
+        loadChildren: () =>
+          import('./features/editor/editor.routes').then((m) => m.routes),
+      },
+      {
         path: '**',
         redirectTo: 'auth',
         pathMatch: 'full',

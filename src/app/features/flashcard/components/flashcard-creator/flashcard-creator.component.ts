@@ -88,7 +88,6 @@ export class FlashcardCreatorComponent {
   handleSave(): void {
     if (this.form.valid) {
       this.store.dispatch(FlashcardsActions.createFlashcard({
-          username: 'testuser', // TODO: Replace with actual username from store
           flashcard: this.flashcardData!
       }));
     }

@@ -15,7 +15,7 @@ export const FlashcardsActions = createActionGroup({
     'Load Flashcard': props<{ activityPubId: string }>(),
     'Add To Review': props<{ flashcard: Flashcard }>(),
     'Load Flashcard Success': props<{ data: Flashcard }>(),
-    'Create Flashcard': props<{ flashcard: FlashcardData, username: string }>(),
+    'Create Flashcard': props<{ flashcard: FlashcardData }>(),
     'Load Flashcard Failure': props<{ error: unknown }>(),
     'Load Model': props<{ activityPubId: string }>(),
     'Load Models': emptyProps(),

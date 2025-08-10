@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './shell.scss'
 })
 export class Shell {
+  protected baseUri: string = document.baseURI;
   private readonly store = inject(Store);
   protected readonly username$ = this.store.select(currentUsername);
 }

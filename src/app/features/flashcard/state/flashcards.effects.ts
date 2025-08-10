@@ -26,11 +26,36 @@ import {
   selectFlashcardsLoading,
   selectAllFlashcardsLoaded,
 } from './flashcards.selectors';
+import { currentUsername } from '../../auth/state/session.selectors';
 import { EduFlashcardModel } from './model.interface';
 import { Model } from './models.reducer';
 import { Flashcard } from './flashcards.reducer';
 import { FlashcardData } from '../components/flashcard/flashcard.component';
 import { SrsService } from '../services/srs.service';
+
+export const createModelEffect = createEffect(
+  (actions$ = inject(Actions), flashcardService = inject(FlashcardService)) =>
+    actions$.pipe(
+      ofType(FlashcardsActions.createModel),
+      switchMap(({ model }: { model: EduFlashcardModel }) =>
+        flashcardService.createModel(model)
+      ),
+      map(({ activityPubId }) => FlashcardsActions.loadModel({ activityPubId }))
+    ),
+  { functional: true, dispatch: true }
+);
+
+export const loadModelsEffect = createEffect(
+  (actions$ = inject(Actions), flashcardService = inject(FlashcardService)) =>
+    actions$.pipe(
+      ofType(FlashcardsActions.loadModels),
+      switchMap(() => flashcardService.getAllModels()),
+      map((models: Model[]) =>
+        FlashcardsActions.loadModelsSuccess({ data: models })
+      )
+    ),
+  { functional: true, dispatch: true }
+);
 
 export const loadFlashcardsPageEffect = createEffect(
   (actions$ = inject(Actions), flashcardService = inject(FlashcardService)) => {
@@ -106,49 +131,34 @@ export const loadModelEffect = createEffect(
   { functional: true, dispatch: true }
 );
 
-export const createModelEffect = createEffect(
-  (actions$ = inject(Actions), flashcardService = inject(FlashcardService)) =>
-    actions$.pipe(
-      ofType(FlashcardsActions.createModel),
-      switchMap(({ model }: { model: EduFlashcardModel }) =>
-        flashcardService.createModel(model)
-      ),
-      map(({ activityPubId }) => FlashcardsActions.loadModel({ activityPubId }))
-    ),
-  { functional: true, dispatch: true }
-);
-
-export const loadModelsEffect = createEffect(
-  (actions$ = inject(Actions), flashcardService = inject(FlashcardService)) =>
-    actions$.pipe(
-      ofType(FlashcardsActions.loadModels),
-      switchMap(() => flashcardService.getAllModels()),
-      map((models: Model[]) =>
-        FlashcardsActions.loadModelsSuccess({ data: models })
-      )
-    ),
-  { functional: true, dispatch: true }
-);
-
 export const createFlashcardEffect = createEffect(
-  (actions$ = inject(Actions), flashcardService = inject(FlashcardService)) =>
+  (
+    actions$ = inject(Actions),
+    flashcardService = inject(FlashcardService),
+    store = inject(Store)
+  ) =>
     actions$.pipe(
       ofType(FlashcardsActions.createFlashcard),
-      switchMap(
-        ({
-          flashcard,
-          username,
-        }: {
-          flashcard: FlashcardData;
-          username: string;
-        }) => flashcardService.createFlashcard(flashcard, username)
-      ),
-      map(({ activityPubId }) =>
-        FlashcardsActions.loadFlashcard({ activityPubId })
-      )
+      withLatestFrom(store.select(currentUsername)),
+      switchMap(([action, username]) => {
+        if (!username) {
+          console.error('Username not found in store. Cannot create flashcard.');
+          return of(FlashcardsActions.loadFlashcardFailure({ error: 'Username not found' })); // Or a more specific error action
+        }
+        return flashcardService.createFlashcard(action.flashcard, username).pipe(
+          map(({ activityPubId }) =>
+            FlashcardsActions.loadFlashcard({ activityPubId })
+          ),
+          catchError((error) => {
+            console.error('Error creating flashcard:', error);
+            return of(FlashcardsActions.loadFlashcardFailure({ error }));
+          })
+        );
+      })
     ),
   { functional: true, dispatch: true }
 );
+
 
 export const addFlashcardToReviewEffect = createEffect(
   (actions$ = inject(Actions), SRSService = inject(SrsService)) =>

@@ -14,7 +14,6 @@ const MAX_FONT_SIZE = 48;
 })
 export class DynamicTextFieldComponent implements AfterViewInit, OnChanges {
   @Input() text = '';
-  @Input() scale = 1;
 
   @ViewChild('textContainer') textContainerRef!: ElementRef<HTMLDivElement>;
 
@@ -38,7 +37,7 @@ export class DynamicTextFieldComponent implements AfterViewInit, OnChanges {
 
     container.style.whiteSpace = isSingleWord ? 'nowrap' : 'normal';
 
-    let currentFontSize = MAX_FONT_SIZE * this.scale;
+    let currentFontSize = MAX_FONT_SIZE;
     container.style.fontSize = `${currentFontSize}px`;
     container.style.lineHeight = `${currentFontSize + 4}px`;
 

@@ -21,7 +21,6 @@
   text-align: center;
   transition-property: transform;
   transform-style: preserve-3d; // Required for children to have 3D position
-  aspect-ratio: 633 / 400; // Maintain the design resolution
 
   // Flip animations
   &.horizontal.flipped {
@@ -38,7 +37,8 @@
   height: 100%;
   -webkit-backface-visibility: hidden; /* Safari */
   backface-visibility: hidden; // Hide the back of the element when facing away
-  border-radius: 8px;
+  border: 1px solid #d2d2d2;
+  border-radius: 10px;
   overflow: hidden;
   box-sizing: border-box;
 }

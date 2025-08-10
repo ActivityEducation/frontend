@@ -4,6 +4,7 @@ import { FlipperComponent } from '../../../../components/flipper/flipper.compone
 import { DynamicTextFieldComponent } from '../../../../components/dynamic-text-field/dynamic-text-field.component';
 import { Model } from '../../state/models.reducer';
 import { Flashcard } from '../../state/flashcards.reducer';
+import { MatIconModule } from '@angular/material/icon';
 
 // --- Type Definitions ---
 
@@ -41,13 +42,15 @@ export interface FlashcardData {
     eduModel: string;
     eduFieldsData: Record<string, any>;
 }
+
 // --- Constants for Scaling ---
-const DESIGN_WIDTH = 633;
+const DESIGN_WIDTH = 656;
+const DESIGN_HEIGHT = 400;
 
 @Component({
   selector: 'app-flashcard',
   standalone: true,
-  imports: [CommonModule, FlipperComponent, DynamicTextFieldComponent],
+  imports: [CommonModule, FlipperComponent, DynamicTextFieldComponent, MatIconModule],
   templateUrl: './flashcard.component.html',
   styleUrls: ['./flashcard.component.scss']
 })
@@ -57,7 +60,7 @@ export class FlashcardComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Input() isFlipped?: boolean;
   @Output() flipChange = new EventEmitter<boolean>();
 
-  @ViewChild('cardContainer') private containerRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('flashcardWrapper') private wrapperRef!: ElementRef<HTMLDivElement>;
 
   public scale = 1;
   public frontTemplate?: EduCardTemplate;
@@ -79,13 +82,12 @@ export class FlashcardComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.resizeObserver = new ResizeObserver(entries => {
       const entry = entries[0];
       if (entry) {
-        this.scale = entry.contentRect.width / DESIGN_WIDTH;
-        this.cdr.detectChanges();
+        this.updateScale(entry.contentRect);
       }
     });
 
-    if (this.containerRef?.nativeElement) {
-      this.resizeObserver.observe(this.containerRef.nativeElement);
+    if (this.wrapperRef?.nativeElement) {
+      this.resizeObserver.observe(this.wrapperRef.nativeElement);
     }
   }
 
@@ -93,6 +95,12 @@ export class FlashcardComponent implements AfterViewInit, OnDestroy, OnChanges {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
+  }
+
+  private updateScale(rect: DOMRectReadOnly): void {
+    this.scale = rect.width / DESIGN_WIDTH;
+    this.wrapperRef.nativeElement.style.height = `${this.scale * DESIGN_HEIGHT}px`;
+    this.cdr.detectChanges();
   }
 
   getFieldDefinition(fieldId: string): EduFieldDefinition | undefined {

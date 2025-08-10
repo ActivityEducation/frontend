@@ -1,4 +1,4 @@
-<div #cardContainer class="flashcard-wrapper">
+<div #flashcardWrapper class="flashcard-wrapper">
   <app-flipper
     *ngIf="frontTemplate && backTemplate"
     [isFlipped]="isFlipped"
@@ -6,7 +6,7 @@
   >
     <!-- Front Side Template -->
     <ng-template #front>
-      <div class="card-container">
+      <div #cardContainer class="card-container">
         <ng-container *ngFor="let layout of frontTemplate.layout">
           <div
             class="field-wrapper"
@@ -19,7 +19,6 @@
               <app-dynamic-text-field
                 *ngSwitchCase="'text'"
                 [text]="getFieldContent(getFieldDefinition(layout.fieldId))"
-                [scale]="scale"
               ></app-dynamic-text-field>
               <img
                 *ngSwitchCase="'image'"
@@ -27,9 +26,8 @@
                 [src]="getFieldContent(getFieldDefinition(layout.fieldId))"
                 [alt]="getFieldDefinition(layout.fieldId)?.name"
               />
-              <!-- Placeholder for icon, requires a dedicated icon component -->
               <div *ngSwitchCase="'icon'">
-                Icon: {{ getFieldContent(getFieldDefinition(layout.fieldId)) }}
+                <mat-icon>{{ getFieldContent(getFieldDefinition(layout.fieldId)) }}</mat-icon>
               </div>
             </ng-container>
           </div>
@@ -39,7 +37,7 @@
 
     <!-- Back Side Template -->
     <ng-template #back>
-      <div class="card-container">
+      <div #cardContainer class="card-container">
         <ng-container *ngFor="let layout of backTemplate.layout">
           <div
             class="field-wrapper"
@@ -52,7 +50,6 @@
               <app-dynamic-text-field
                 *ngSwitchCase="'text'"
                 [text]="getFieldContent(getFieldDefinition(layout.fieldId))"
-                [scale]="scale"
               ></app-dynamic-text-field>
               <img
                 *ngSwitchCase="'image'"
@@ -61,7 +58,7 @@
                 [alt]="getFieldDefinition(layout.fieldId)?.name"
               />
               <div *ngSwitchCase="'icon'">
-                Icon: {{ getFieldContent(getFieldDefinition(layout.fieldId)) }}
+                <mat-icon>{{ getFieldContent(getFieldDefinition(layout.fieldId)) }}</mat-icon>
               </div>
             </ng-container>
           </div>

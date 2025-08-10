@@ -165,7 +165,7 @@ export const addFlashcardToReviewEffect = createEffect(
     actions$.pipe(
       ofType(FlashcardsActions.addToReview),
       switchMap(({ flashcard }: { flashcard: Flashcard }) =>
-        SRSService.addToReview({ flashcardActivityPubId: flashcard.id })
+        SRSService.addToReview({ flashcardActivityPubId: flashcard.activityPubId })
       )
     ),
   { functional: true, dispatch: false }
